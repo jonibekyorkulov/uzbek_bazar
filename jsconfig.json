@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "baseUrl": "./",
+        
         "paths": {
               "@fuse/*": ["./src/@fuse/*"],
               "@history*": ["./src/@history"],
