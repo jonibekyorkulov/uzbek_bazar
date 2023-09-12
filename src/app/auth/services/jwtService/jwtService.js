@@ -1,5 +1,6 @@
 import FuseUtils from '@fuse/utils/FuseUtils';
-import axios from 'axios';
+// import axios from 'axios';
+import axios  from '../../../../utls/baseUrl';
 import jwtDecode from 'jwt-decode';
 import jwtServiceConfig from './jwtServiceConfig';
 
@@ -64,17 +65,28 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithEmailAndPassword = (email, password) => {
     return new Promise((resolve, reject) => {
       axios
-        .get(jwtServiceConfig.signIn, {
-          data: {
-            email,
-            password,
-          },
+        .post(jwtServiceConfig.signIn, {
+            username: email,
+            password: password,
         })
         .then((response) => {
-          if (response.data.user) {
-            this.setSession(response.data.access_token);
-            resolve(response.data.user);
-            this.emit('onLogin', response.data.user);
+          if (response.data) {
+            this.setSession(response.data.token);
+                axios
+            .get(jwtServiceConfig.accessToken, {
+              data: {
+                access_token: this.getAccessToken(),
+              },
+            })
+            .then((response) => {
+              console.log(response.data);
+              // resolve(response.data.user);
+              // this.emit('onLogin', response.data.user);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+            
           } else {
             reject(response.data.error);
           }
