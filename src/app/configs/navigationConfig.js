@@ -14,6 +14,7 @@ const navigationConfig = [
     type: 'item',
     icon: 'heroicons-outline:chart-pie',
     url: '/dashboards/analytics',
+    auth: 'organization'
   },
   {
     id: 'apps.ecommerce',
@@ -21,6 +22,7 @@ const navigationConfig = [
     type: 'collapse',
     icon: 'heroicons-outline:shopping-cart',
     translate: 'ECOMMERCE',
+    auth: 'organization',
     children: [
       {
         id: 'e-commerce-products',
@@ -51,6 +53,8 @@ const navigationConfig = [
     icon: 'heroicons-outline:calendar',
     url: '/apps/calendar',
     translate: 'CALENDAR',
+    auth: 'organization',
+
   },
   {
     id: 'apps.chat',
@@ -59,6 +63,8 @@ const navigationConfig = [
     icon: 'heroicons-outline:chat-alt',
     url: '/apps/chat',
     translate: 'CHAT',
+    auth: 'organization',
+
   },
   {
     id: 'apps.contacts',
@@ -67,6 +73,8 @@ const navigationConfig = [
     icon: 'heroicons-outline:user-group',
     url: '/apps/contacts',
     translate: 'CONTACTS',
+    auth: 'organization',
+
   },
 ];
 

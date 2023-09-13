@@ -1,7 +1,6 @@
-import FuseUtils from '@fuse/utils/FuseUtils';
-// import axios from 'axios';
-import axios  from '../../../../utls/baseUrl';
 import jwtDecode from 'jwt-decode';
+import FuseUtils from '@fuse/utils/FuseUtils';
+import axios  from '../../../../utls/baseUrl';
 import jwtServiceConfig from './jwtServiceConfig';
 
 /* eslint-disable camelcase */
@@ -72,20 +71,33 @@ class JwtService extends FuseUtils.EventEmitter {
         .then((response) => {
           if (response.data) {
             this.setSession(response.data.token);
-                axios
-            .get(jwtServiceConfig.accessToken, {
-              data: {
-                access_token: this.getAccessToken(),
-              },
-            })
-            .then((response) => {
-              console.log(response.data);
-              // resolve(response.data.user);
-              // this.emit('onLogin', response.data.user);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+            axios
+              .get(jwtServiceConfig.accessToken, {
+                data: {
+                  access_token: this.getAccessToken(),
+                },
+              })
+              .then((ress) => {
+                const data = {
+                  "role": "",
+                  "data": {
+                    "displayName": "",
+                    "photoURL": "",
+                    "email": "",
+                  }
+                }
+
+                data.role = ress.data.role
+                data.data.displayName = ress.data.name
+                data.data.photoURL = ress.data.avatar
+                data.data.email = ress.data.phone
+                
+                resolve(data);
+                this.emit('onLogin', data);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
             
           } else {
             reject(response.data.error);
@@ -97,32 +109,41 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithToken = () => {
     return new Promise((resolve, reject) => {
       axios
-        .get(jwtServiceConfig.accessToken, {
-          data: {
-            access_token: this.getAccessToken(),
-          },
-        })
-        .then((response) => {
-          if (response.data.user) {
-            this.setSession(response.data.access_token);
-            resolve(response.data.user);
-          } else {
-            this.logout();
-            reject(new Error('Failed to login with token.'));
+      .get(jwtServiceConfig.accessToken, {
+        data: {
+          access_token: this.getAccessToken(),
+        },
+      })
+      .then((response) => {
+        const data = {
+          "role": "",
+          "data": {
+            "displayName": "",
+            "photoURL": "",
+            "email": "",
+            
           }
-        })
-        .catch((error) => {
-          this.logout();
-          reject(new Error('Failed to login with token.'));
-        });
+        }
+
+        data.role = response.data.role
+        data.data.displayName = response.data.name
+        data.data.photoURL = response.data.avatar
+        data.data.email = response.data.phone
+        
+        resolve(data);
+        this.emit('onLogin', data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     });
   };
 
-  updateUserData = (user) => {
-    return axios.post(jwtServiceConfig.updateUser, {
-      user,
-    });
-  };
+  // updateUserData = (user) => {
+  //   return axios.post(jwtServiceConfig.updateUser, {
+  //     user,
+  //   });
+  // };
 
   setSession = (access_token) => {
     if (access_token) {
