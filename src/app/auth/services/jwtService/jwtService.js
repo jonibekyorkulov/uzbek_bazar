@@ -61,12 +61,12 @@ class JwtService extends FuseUtils.EventEmitter {
     });
   };
 
-  signInWithEmailAndPassword = (email, password) => {
+  signInWithEmailAndPassword = (username, password) => {
     return new Promise((resolve, reject) => {
       axios
         .post(jwtServiceConfig.signIn, {
-            username: email,
-            password: password,
+            username,
+            password,
         })
         .then((response) => {
           if (response.data) {
@@ -139,11 +139,13 @@ class JwtService extends FuseUtils.EventEmitter {
     });
   };
 
-  // updateUserData = (user) => {
-  //   return axios.post(jwtServiceConfig.updateUser, {
-  //     user,
-  //   });
-  // };
+  updateUserData = (user) => {
+    this.emit()
+    return axios.post(jwtServiceConfig.updateUser, {
+      user,
+    });
+    
+  };
 
   setSession = (access_token) => {
     if (access_token) {
